@@ -1,1 +1,3 @@
 venv/
+firstcrawler/output.json
+firstcrawler/firstcrawler/spiders/__pycache__/
