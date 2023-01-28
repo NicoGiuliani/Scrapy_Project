@@ -18,15 +18,13 @@ class CrawlingSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        title_and_price = dict(
-            zip(
-                response.css(".product_pod a::attr(title)").getall(),
-                response.css(".price_color::text").getall(),
-            )
-        )
+        titles = response.css(".product_pod a::attr(title)").getall()
+        prices = response.css(".price_color::text").getall()
 
         yield {
             "category": response.css(".page-header h1::text").get(),
             "number_results": response.css(".form-horizontal strong::text").get(),
-            "title_and_price": title_and_price,
+            "titles": titles,
+            "prices": prices,
+            "valid": len(titles) == len(prices),
         }
