@@ -5,11 +5,16 @@ from scrapy.linkextractors import LinkExtractor
 class CrawlingSpider(CrawlSpider):
     name = "primaryspider"
     allowed_domains = ["toscrape.com"]
-    start_urls = ["http://books.toscrape.com/"]
+    start_urls = ["http://books.toscrape.com"]
 
     rules = (
-        Rule(LinkExtractor(allow="catalogue/category/books"), callback="parse_item"),
-        # Rule(LinkExtractor(allow="catalogue", deny="category"), callback="parse_item"),
+        Rule(
+            LinkExtractor(
+                allow=r"/catalogue/category/books/.*/(index\.html|page-[0-9]+\.html)$"
+            ),
+            callback="parse_item",
+            follow=True,
+        ),
     )
 
     def parse_item(self, response):
