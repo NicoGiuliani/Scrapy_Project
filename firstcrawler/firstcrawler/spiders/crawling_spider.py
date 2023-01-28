@@ -8,13 +8,20 @@ class CrawlingSpider(CrawlSpider):
     start_urls = ["http://books.toscrape.com/"]
 
     rules = (
-        Rule(LinkExtractor(allow="catalogue/category")),
-        Rule(LinkExtractor(allow="catalogue", deny="category"), callback="parse_item"),
+        Rule(LinkExtractor(allow="catalogue/category/books"), callback="parse_item"),
+        # Rule(LinkExtractor(allow="catalogue", deny="category"), callback="parse_item"),
     )
 
     def parse_item(self, response):
+        title_and_price = dict(
+            zip(
+                response.css(".product_pod a::attr(title)").getall(),
+                response.css(".price_color::text").getall(),
+            )
+        )
+
         yield {
-            "title": response.css(".product_main h1::text").get(),
-            "price": response.css(".price_color::text").get(),
-            "availability": response.css(".availability::text")[1].get().strip(),
+            "category": response.css(".page-header h1::text").get(),
+            "number_results": response.css(".form-horizontal strong::text").get(),
+            "title_and_price": title_and_price,
         }
