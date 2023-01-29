@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 import random
 import sys
 
@@ -60,16 +61,29 @@ def main():
                 + str(titles_by_category[entry][1])
             )
 
+    index = ["category", "total price", "average price"]
+    df = pd.DataFrame(columns=index)
+
+    # iterate through and show the total of all book prices in a category, and the average cost of a book in that category
     for category in titles_by_category:
         total = 0.00
         for title in titles_by_category[category][1]:
             with_currency_symbol = titles_by_category[category][1][title]
-            amount = float(titles_by_category[category][1][title][1::])
+            amount = float(with_currency_symbol[1::])
             total += amount
 
+        average_price = total / int(titles_by_category[category][0])
+
         print(
-            f"Category: {category} => Total: {round(total, 2)} => Avg Price: {round(total/int(titles_by_category[category][0]), 2)}"
+            f"Category: {category} => Total: {round(total, 2)} => Avg Price: {round(average_price, 2)}"
         )
+
+        temp_series = pd.Series(
+            [category, round(total, 2), round(average_price, 2)], index=index
+        )
+        df = pd.concat([df, temp_series.to_frame().T], ignore_index=True)
+
+        df.to_csv("output.csv", index=False)
 
 
 if __name__ == "__main__":
