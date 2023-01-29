@@ -1,5 +1,5 @@
 The intention of this project is to:
-- Scrape the data from book.toscrape.com
+- Scrape the data from books.toscrape.com
 - Determine the total value of all books within each category
 - Find the average cost of a book by category
 
