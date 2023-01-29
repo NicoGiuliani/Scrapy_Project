@@ -82,6 +82,7 @@ def main():
             [category, round(total, 2), round(average_price, 2)], index=index
         )
         df = pd.concat([df, temp_series.to_frame().T], ignore_index=True)
+        df = df.sort_values("average price", ascending=False)
 
         df.to_csv("output.csv", index=False)
 
