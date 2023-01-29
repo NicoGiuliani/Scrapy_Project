@@ -44,8 +44,12 @@ def main():
                         if title not in titles_in_current_category:
                             titles_in_current_category[title] = prices_by_title[title]
 
+    # alert if any category has a different number of titles than is expected
     for entry in titles_by_category:
-        if int(titles_by_category[entry][0]) != len(titles_by_category[entry][1]):
+        expected_total = int(titles_by_category[entry][0])
+        actual_total = len(titles_by_category[entry][1])
+
+        if expected_total != actual_total:
             print(
                 entry
                 + ": "
@@ -55,6 +59,17 @@ def main():
                 + "\n\n"
                 + str(titles_by_category[entry][1])
             )
+
+    for category in titles_by_category:
+        total = 0.00
+        for title in titles_by_category[category][1]:
+            with_currency_symbol = titles_by_category[category][1][title]
+            amount = float(titles_by_category[category][1][title][1::])
+            total += amount
+
+        print(
+            f"Category: {category} => Total: {round(total, 2)} => Avg Price: {round(total/int(titles_by_category[category][0]), 2)}"
+        )
 
 
 if __name__ == "__main__":
